@@ -10,8 +10,9 @@ function addtostorage(event)
         productname,
         choosecat
     }
-    axios.post('https://crudcrud.com/api/06f68e49a63147b88f4731456799820a/validatedata',obj)
+    axios.post('https://crudcrud.com/api/bfa8f8e285a64bc88aab53609dd110f1/validatedata',obj)
     .then((res)=>{
+        console.log(res.data)
         addtolist(res.data)
     })
     .catch((err)=>console.log(err))
@@ -23,14 +24,15 @@ function addtolist(data)
     let cat3=document.getElementById('3')
     let childele=document.createElement('li')
     childele.id=`${data._id}`;
-    childele.textContent=`${data.sellingprice}-${data.productname}-${data.choosecat}`
+    childele.innerHTML=`<h6>${data.sellingprice}-${data.productname}-${data.choosecat}</h6>`
     let dele=document.createElement('input')
     dele.type='button'
     dele.value='Delete'
+    dele.className='btn btn-primary mx-1'
     dele.onclick=()=>{
-        axios.delete(`https://crudcrud.com/api/06f68e49a63147b88f4731456799820a/validatedata/${data.id}`)
+        axios.delete(`https://crudcrud.com/api/bfa8f8e285a64bc88aab53609dd110f1/validatedata/${data._id}`)
     .then(
-        removechild(`'${data._id}',${data.choosecat}`)
+        removechild(`${data._id}`,`${data.choosecat}`)
     )
     .catch(
         (err)=>console.log(err)
@@ -85,3 +87,12 @@ function removechild(userid,category)
         
     }
 }
+window.addEventListener('DOMContentLoaded',()=>{
+    axios.get(`https://crudcrud.com/api/bfa8f8e285a64bc88aab53609dd110f1/validatedata`)
+    .then((res)=>{
+        for(var i=0;i<res.data.length;i++)
+        {
+            addtolist(res.data[i])
+        }
+    })
+})
